@@ -1,18 +1,28 @@
-﻿using LoginSystem.Data;
-using Microsoft.AspNetCore.Http;
+﻿using LoginSystem.Dtos;
+using LoginSystem.Models;
+using LoginSystem.Services.User;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LoginSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
 
-    public class AuthController : ControllerBase
+    public class AuthController : Controller
     {
-        [HttpGet]
-        public IActionResult Hello()
+        private readonly IUserInterface _userInterface;
+
+        public AuthController(IUserInterface userInterface)
         {
-            return Ok("Ta funfando");
+            _userInterface = userInterface;
+        }
+
+        [HttpPost("registerUser")]
+        public async Task<ActionResult<ResponseModel<List<UserModel>>>> RegisterUser(RegisterUserDto registerUserDto)
+        {
+            var user = await _userInterface.RegisterUser(registerUserDto);
+            return Ok(user);
         }
     }
 }
