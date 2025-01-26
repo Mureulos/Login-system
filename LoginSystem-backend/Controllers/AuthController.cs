@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LoginSystem.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoginSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class AuthController : ControllerBase
     {
         [HttpGet]
