@@ -24,5 +24,12 @@ namespace LoginSystem.Controllers
             var user = await _userInterface.RegisterUser(registerUserDto);
             return Ok(user);
         }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<ResponseModel<List<UserModel>>>> Login(LoginDto loginDto)
+        {
+            var user = await _userInterface.Login(loginDto);
+            return Ok(user);
+        }
     }
 }

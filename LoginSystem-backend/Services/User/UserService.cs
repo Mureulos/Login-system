@@ -1,4 +1,5 @@
-﻿using BCrypt.Net;
+﻿using Azure;
+using BCrypt.Net;
 using LoginSystem.Data;
 using LoginSystem.Dtos;
 using LoginSystem.Models;
@@ -36,6 +37,38 @@ namespace LoginSystem.Services.User
                 response.Message = "User registred!";
                 return response;
             }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = false;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<UserModel>> Login(LoginDto dto)
+        {
+            ResponseModel<UserModel> response = new ResponseModel<UserModel>();
+
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(user => user.Email == dto.Email);
+
+                if (user == null)
+                {
+                    response.Message = "Email not found!";
+                    return response;
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
+                {
+                    response.Message = "Wrong password!";
+                    return response;
+                }
+
+                response.Data = user;
+                response.Message = "Logged in!";
+                return response;
+            } 
             catch (Exception ex)
             {
                 response.Message = ex.Message;
