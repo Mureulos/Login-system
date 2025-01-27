@@ -6,6 +6,7 @@ using LoginSystem.Helpers;
 using LoginSystem.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Any;
 
 namespace LoginSystem.Services.User
 {
@@ -84,6 +85,15 @@ namespace LoginSystem.Services.User
                 response.Status = false;
                 return response;
             }
+        }
+
+        public async Task<ResponseModel<AnyType>> Logout()
+        {
+            ResponseModel<AnyType> response = new ResponseModel<AnyType>();
+
+            _httpContextAccessor.HttpContext.Response.Cookies.Delete("jwt");
+            response.Message = "Logged out!";
+            return response;
         }
 
         public async Task<ResponseModel<UserModel>> GetUser()

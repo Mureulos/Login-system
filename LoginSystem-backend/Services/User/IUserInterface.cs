@@ -1,5 +1,6 @@
 ﻿using LoginSystem.Dtos;
 using LoginSystem.Models;
+using Microsoft.OpenApi.Any;
 
 namespace LoginSystem.Services.User
 {
@@ -7,6 +8,7 @@ namespace LoginSystem.Services.User
     {
         Task<ResponseModel<List<UserModel>>> RegisterUser(RegisterUserDto registerUserDto);
         Task<ResponseModel<UserModel>> Login(LoginDto loginDto);
+        Task<ResponseModel<AnyType>> Logout();
         Task<ResponseModel<UserModel>> GetUser();
     }
 }

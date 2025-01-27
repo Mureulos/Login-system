@@ -33,8 +33,15 @@ namespace LoginSystem.Controllers
             var response = await _userInterface.Login(loginDto);
             return Ok(response);
         }
+        
+        [HttpPost("logout")]
+        public async Task<ActionResult<ResponseModel<List<UserModel>>>> Logout()
+        {
+            var response = _userInterface.Logout();
+            return Ok(response);
+        }
 
-        [HttpGet("user")]
+        [HttpGet("getUser")]
         public async Task<ActionResult<ResponseModel<List<UserModel>>>> GetUser()
         {
             var user = await _userInterface.GetUser();
