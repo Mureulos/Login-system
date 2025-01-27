@@ -1,4 +1,5 @@
 using LoginSystem.Data;
+using LoginSystem.Helpers;
 using LoginSystem.Services.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserInterface, UserService>();
+builder.Services.AddScoped<JwtService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

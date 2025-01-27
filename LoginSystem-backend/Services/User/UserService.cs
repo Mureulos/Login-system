@@ -2,7 +2,9 @@
 using BCrypt.Net;
 using LoginSystem.Data;
 using LoginSystem.Dtos;
+using LoginSystem.Helpers;
 using LoginSystem.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace LoginSystem.Services.User
@@ -10,10 +12,14 @@ namespace LoginSystem.Services.User
     public class UserService : IUserInterface
     {
         public readonly AppDbContext _context;
+        public readonly JwtService _jwtService;
+        public readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(AppDbContext context)
+        public UserService(AppDbContext context, JwtService jwtService, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _jwtService = jwtService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ResponseModel<List<UserModel>>> RegisterUser(RegisterUserDto dto)
@@ -64,6 +70,9 @@ namespace LoginSystem.Services.User
                     response.Message = "Wrong password!";
                     return response;
                 }
+
+                var jwt = _jwtService.Generate(user.Id);
+                _httpContextAccessor.HttpContext.Response.Cookies.Append("jwt", jwt, new CookieOptions { HttpOnly = true });
 
                 response.Data = user;
                 response.Message = "Logged in!";
