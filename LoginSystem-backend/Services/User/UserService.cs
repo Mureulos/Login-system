@@ -85,5 +85,29 @@ namespace LoginSystem.Services.User
                 return response;
             }
         }
+
+        public async Task<ResponseModel<UserModel>> GetUser()
+        {
+            ResponseModel<UserModel> response = new ResponseModel<UserModel>();
+
+            try
+            {
+                var jwt = _httpContextAccessor.HttpContext.Request.Cookies["jwt"];
+                var token = _jwtService.Verify(jwt);
+                int userId = int.Parse(token.Issuer);
+                var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
+
+                response.Data = user;
+                response.Message = "User getted";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = false;
+                return response;
+            }
+        }
+
     }
 }

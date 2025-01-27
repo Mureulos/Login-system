@@ -30,7 +30,14 @@ namespace LoginSystem.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<ResponseModel<List<UserModel>>>> Login(LoginDto loginDto)
         {
-            var user = await _userInterface.Login(loginDto);
+            var response = await _userInterface.Login(loginDto);
+            return Ok(response);
+        }
+
+        [HttpGet("user")]
+        public async Task<ActionResult<ResponseModel<List<UserModel>>>> GetUser()
+        {
+            var user = await _userInterface.GetUser();
             return Ok(user);
         }
     }
